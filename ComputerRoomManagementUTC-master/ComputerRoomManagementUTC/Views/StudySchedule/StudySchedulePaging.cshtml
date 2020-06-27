@@ -1,0 +1,345 @@
+﻿@model Common.Common.ReturnResult<Common.Entity.Models.StudySchedule.StudySchedule>
+@{
+    const int ACTIVATE = 1;
+    const int DEACTIVATE = 0;
+    const int SUNDAY = 0;
+    const int MONDAY = 1;
+    const int TUESDAY = 2;
+    const int WEDNESDAY = 3;
+    const int THURSDAY = 4;
+    const int FRIDAY = 5;
+    const int SATURDAY = 6;
+    var StudyScheduleList = ViewBag.StudyScheduleList;
+    var ExistingStudySchedule = ViewBag.ExistingStudySchedule;
+}
+<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage StudySchedules</div>
+        </h1>
+        <button id="exportFilteredItemBtn" class="btn btn-sm btn-info">Export file with the filter</button>
+        <button id="exportExistingScheduleBtn" class="btn btn-sm btn-info">Export existing study schedule</button>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Computer Room List</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table id="table" class="table table-striped">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>StartDate</th>
+                                        <th>EndDate</th>
+                                        <th>No</th>
+                                        <th>ClassName</th>
+                                        <th>ComputerRoomName</th>
+                                        <th>EmployeeName</th>
+                                        <th>ShiftName</th>
+                                        <th>SubjectName</th>
+                                        <th>TeacherName</th>
+                                        <th>Status</th>
+                                        <th>
+                                            Action
+                                            <br />
+                                            <button id="add-btn" class="ion-plus"></button>
+                                        </th>
+                                    </tr>
+                                    @foreach (var studySchedule in Model.ItemList)
+                                    {
+                                        <tr>
+                                            <td>@studySchedule.PK_Id</td>
+                                            <td>@studySchedule.StartDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@studySchedule.EndDate.ToString("dd/MM/yyyy")</td>
+                                            @switch (studySchedule.DayOfWeek)
+                                            {
+                                                case MONDAY:
+                                                    <td>Monday</td>
+                                                    break;
+                                                case TUESDAY:
+                                                    <td>Tuesday</td>
+                                                    break;
+                                                case WEDNESDAY:
+                                                    <td>Wednesday</td>
+                                                    break;
+                                                case THURSDAY:
+                                                    <td>Thursday</td>
+                                                    break;
+                                                case FRIDAY:
+                                                    <td>Friday</td>
+                                                    break;
+                                                case SATURDAY:
+                                                    <td>Saturday</td>
+                                                    break;
+                                                case SUNDAY:
+                                                    <td>Sunday</td>
+                                                    break;
+                                            }
+                                            <td>@studySchedule.ClassName</td>
+                                            <td>@studySchedule.ComputerRoomName</td>
+                                            <td>@studySchedule.EmployeeName</td>
+                                            <td>@studySchedule.ShiftName</td>
+                                            <td>@studySchedule.SubjectName</td>
+                                            <td>@studySchedule.TeacherName</td>
+                                            @if (@studySchedule.Status == ACTIVATE)
+                                            {
+                                                <td><a href="javascript:void(0)" class="badge badge-success" onclick="UpdateStatus('@studySchedule.PK_Id', '@studySchedule.PK_Id', '@DEACTIVATE')">Active</a></td>
+                                            }
+                                            else
+                                            {
+                                                <td><a href="javascript:void(0)" class="badge badge-danger" onclick="UpdateStatus('@studySchedule.PK_Id', '@studySchedule.PK_Id', '@ACTIVATE')">Deactive</a></td>
+                                            }
+                                            <td>
+                                                <a href="@Url.Action("Edit", "StudySchedule", new { Id = studySchedule.PK_Id })" id="edit-btn" class="ion-edit" width="50px"></a>
+                                                <a href="javascript:void(0)" id="delete-btn" onclick="Delete('@studySchedule.PK_Id', '@studySchedule.PK_Id')" class="ion-trash-a"></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <nav class="d-inline-block">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1"><i class="ion ion-chevron-left"></i></a>
+                                    </li>
+
+                                    @{
+                                        var numberOfPages = Model.TotalRows / ViewBag.PAGE_SIZE;
+                                        for (int i = 0; i <= numberOfPages; i++)
+                                        {
+                                            <li class="page-item "><a class="page-link" href="@Url.Action("StudySchedulePaging", "StudySchedule", new { PAGE_INDEX = i+1, PAGE_SIZE = 10 })">@(i + 1)<span class="sr-only">(current)</span></a></li>
+                                        }
+                                    }
+                                    <li class="page-item">
+                                        <a class="page-link" href="#"><i class="ion ion-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="card card-primary">
+
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="ComputerRoom">Computer Room Name</label>
+                                                <select id="ComputerRoom" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="ComputerRoom" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <div class="row>"
+
+                                                <label for="Class" class="col-md-4" >Class Name</label>
+                                                <select id="Class" class="select2 col-md-3" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="Class" class="error"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="Teacher" class="col-md-3">Teacher Name</label>
+                                                <select id="Teacher" class="select2 col-md-2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="Teacher" class="error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button id="search-btn" type="submit" class="btn btn-primary btn-block">
+                                                Search
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script>
+    
+    
+    $(document).ready(function () {
+        var filterItems = JSON.parse('@StudyScheduleList'.replace(/&quot;/g, '"'));
+        var existingStudySchedule = JSON.parse('@ExistingStudySchedule'.replace(/&quot;/g, '"'));
+        $("#add-btn").click(function () {
+            window.location.href = '@Url.Action("Add", "StudySchedule")';
+        });
+
+        getFilterData();
+        
+
+        $("#exportFilteredItemBtn").click(function (event) {
+            event.preventDefault();
+            dataModel = {
+                filterItems: filterItems
+            };
+            $.ajax({
+                url: '@Url.Action("CreateFilteredItem", "StudySchedule")',
+                type: "POST",
+                data: dataModel,
+                success: function () {
+                    window.location = '@Url.Action("ExportFilteredItem", "StudySchedule")';
+
+                }
+            });
+        });
+        $("#exportExistingScheduleBtn").click(function (event) {
+            event.preventDefault();
+            dataModel = {
+                filterItems: existingStudySchedule
+            };
+            $.ajax({
+                url: '@Url.Action("CreateFilteredItem", "StudySchedule")',
+                type: "POST",
+                data: dataModel,
+                success: function () {
+                    window.location = '@Url.Action("ExportFilteredItem", "StudySchedule")';
+                    
+                }
+            });
+        })
+            $("#search-btn").click(function (event) {
+                event.preventDefault();
+                var dataModel =
+                {
+                    filterRuleList: searchInfo(),
+                    PAGE_INDEX : @ViewBag.PAGE_INDEX,
+                    PAGE_SIZE : @ViewBag.PAGE_SIZE,
+
+                };
+
+                $.ajax({
+                    url: '@Url.Action("Search", "StudySchedule")',
+                    type: "POST",
+                    data: dataModel,
+                    dataType: "json",
+                    cache: false,
+                    beforeSend: function (xhr) {
+
+                    },
+                    success: function (response) {
+                        var itemList = response.itemList;
+                        
+                        // assign the filtered list value to a global variable
+                        filterItems = itemList;
+                        console.log(filterItems);
+                        if (itemList.length > 0) {
+                            $('#table').find("tr:gt(0)").remove();
+                            for (var i = 0; i < itemList.length; i++){
+                                var item = response.itemList[i];
+                                var text = `    <tr>
+                                <td> ` + item.pK_Id + `</td>
+                                <td> `+ item.startDate + `</td>
+                                <td> `+ item.endDate + `</td>
+                                <td> `+ item.className + `</td>
+                                <td> `+ item.computerRoomName + `</td>
+                                <td> `+ item.employeeName + `</td>
+                                <td> `+ item.shiftName + `</td>
+                                <td> `+ item.subjectName + `</td>
+                                <td> `+ item.teacherName + `</td>
+                                <td> `+ item.status + `</td>
+                                <td><a href="javascript:void(0)" class="badge badge-success" onclick="UpdateStatus(' ` + item.pK_Id + `', '` + item.pK_Id + `', '1')">Active</a></td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "StudySchedule")/` + item.pK_Id + `" id="edit - btn" class="ion-edit" width="50px"></a>
+                                    <a href="javascript:void(0)" id="delete-btn" onclick="Delete(' `+ item.pK_Id + `', '` + item.pK_Id +`')" class="ion-trash-a"></a>
+                                </td>
+                                </tr>`;
+                                $('#table tr:last').after(text);
+                            }
+                        }else {
+                            $.confirm({
+                                        title: 'Thông báo',
+                                        useBootstrap: false,
+                                        type: 'blue',
+                                        boxWidth: '500px',
+                                        content: 'Can not find any matching data',
+                                        buttons: {
+                                            confirm: {
+                                                text: 'OK',
+                                                btnClass: 'btn-blue',
+                                                key: ['enter'],
+                                                action: function () {
+                                                    location.reload();
+                                                }
+                                            }
+                                        }
+                                    });
+                        }
+                        var text = "<td>Hello</td>";
+                        window.scroll({
+                            top: 0,
+                            left: 0,
+                            behavior: 'smooth'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                    },
+                    complete: function () {
+                    }
+                });
+            })
+        })
+        function Delete (id, name) {
+            // Tạo thông tin xóa StudySchedule
+            var deleteInfo = {
+                Title: 'Xác nhận xóa StudySchedule',
+                Content: 'Bạn có muốn xóa <b>' + name + '</b> không?',
+                ConfirmButton: 'Xác nhận',
+                CancelButton: 'Hủy bỏ',
+                Id: id,
+                RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
+                Url: '@Url.Action("Delete", "StudySchedule")',
+                errorTitle: 'Thông báo lỗi',
+                errorContent: 'Thay đổi trạng thái thất bại'
+            };
+
+
+            // Gọi hàm common để xóa trường học
+            common.delete(deleteInfo);
+        };
+    function getFilterData() {
+        masterData.GetComputerRoomSelect2Data("ComputerRoom");
+        masterData.GetTeacherSelect2Data("Teacher");
+        masterData.GetClassSelect2Data("Class");
+    }
+
+    function UpdateStatus(Id, Name, Status) {
+            var updateStatusInfo = {
+                Title: 'Xác nhận thay đổi trạng thái StudySchedule',
+                Content: 'Bạn có muốn thay đổi trạng thái của <b>' + Name + '</b> không?',
+                ConfirmButton: 'Xác nhận',
+                CancelButton: 'Hủy bỏ',
+                Id: Id,
+                Status: Status,
+                RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
+                Url: '@Url.Action("EditStatus", "StudySchedule")',
+                errorTitle: 'Thông báo lỗi',
+                errorContent: 'Thay đổi trạng thái thất bại'
+            }
+            common.updateStatus(updateStatusInfo);
+            };
+
+    function searchInfo() {
+        var filterItem = [
+            { field: "FK_TeacherId", op: "and_in_ints", value: $("#Teacher").val().join() },
+            { field: "FK_ComputeRoomId", op: "and_in_ints", value: $("#ComputerRoom").select2('val').join() },
+            { field: "FK_ClassId", op: "and_in_ints", value: $("#Class").select2('val').join() }]
+        return filterItem;
+    }
+    </script>
+}

@@ -1,0 +1,197 @@
+﻿<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage Study Schedules</div>
+        </h1>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="login-brand">
+                                    Create a new StudySchedule
+                                </div>
+                                <div class="card card-primary">
+                                    <div class="card-body">
+                                        <form id="add-form" class="needs-validation" novalidate="">
+                                            <div class="form-group">
+                                                <label for="StartDate">Start Date</label>
+                                                <input id="StartDate" type="date" class="form-control" name="StartDate" tabindex="1" autofocus>
+                                                <span target="StartDate" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="EndDate">End Date</label>
+                                                <input id="EndDate" type="date" class="form-control" name="StartDate" tabindex="1">
+                                                <span target="EndDate" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="DayOfWeek">
+                                                    Day Of Week
+                                                </label>
+                                                <select id="DayOfWeek" name="DayOfWeek" class="js-example-basic-single" tabindex="2">
+                                                    <option value="0">Sunday</option>
+                                                    <option value="1">Monday</option>
+                                                    <option value="2">Tuesday</option>
+                                                    <option value="3">Wednesday</option>
+                                                    <option value="4">Thursday</option>
+                                                    <option value="5">Friday</option>
+                                                    <option value="6">Saturday</option>
+                                                </select>
+                                                <span target="DayOfWeek" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ClassName">Class Name</label>
+                                                <select id="ClassName" type="text" class="form-control" name="ClassName" tabindex="1"></select>
+                                                <span target="ClassName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ComputerRoomName">Computer Room Name</label>
+                                                <select id="ComputerRoomName" type="text" class="form-control" name="ClassName" tabindex="1"></select>
+                                                <span target="ComputerRoomName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="EmployeeName">Employee Name</label>
+                                                <select id="EmployeeName" type="text" class="form-control" name="EmployeeName" tabindex="1"></select>
+                                                <span target="EmployeeName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ShiftName">Shift Name</label>
+                                                <select id="ShiftName" type="text" class="form-control" name="ShiftName" tabindex="1"></select>
+                                                <span target="ShiftName" class="error"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="SubjectName">Subject Name</label>
+                                                <select id="SubjectName" type="text" class="form-control" name="SubjectName" tabindex="1"></select>
+                                                <span target="SubjectName" class="error"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="TeacherName">Teacher Name</label>
+                                                <select id="TeacherName" type="text" class="form-control" name="TeacherName" tabindex="1"></select>
+                                                <span target="TeacherName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Status">
+                                                    Status
+                                                </label>
+                                                <select id="Status" name="Status" class="js-example-basic-single" tabindex="2">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Deactive</option>
+                                                </select>
+                                                <span target="Status" class="error"></span>
+                                            </div>
+                                            <span target="ErrorMessage" class="error"></span>
+                                            <div class="form-group">
+                                                <button id="submit-btn" type="submit" class="btn btn-primary btn-block " tabindex="3">
+                                                    Submit
+                                                </button>
+                                                <button id="cancel-btn" class="btn btn-primary btn-block" tabindex="4">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Retrive data from datasource
+            masterData.GetClassSelect2Data("ClassName");
+            masterData.GetComputerRoomSelect2Data("ComputerRoomName");
+            masterData.GetTeacherSelect2Data("TeacherName");
+            masterData.GetShiftSelect2Data("ShiftName");
+            masterData.GetSubjectSelect2Data("SubjectName");
+            masterData.GetEmployeeSelect2Data("EmployeeName");
+
+            $("#add-form").on('submit', function (event) {
+                event.preventDefault();
+                var dataModel = {
+                    startDate: $("#StartDate").val(),
+                    endDate: $("#EndDate").val(),
+                    classId: $("#ClassName").select2('val'),
+                    dayOfWeek: $("#DayOfWeek").val(),
+                    computerRoomId: $("#ComputerRoomName").select2('val'),
+                    employeeId: $("#EmployeeName").select2('val'),
+                    shiftId: $("#ShiftName").select2('val'),
+                    subjectId: $("#SubjectName").select2('val'),
+                    teacherId: $("#TeacherName").select2('val'),
+                    status: $("#Status").val()
+                }
+                $("#add-form-btn").attr("disabled", true);
+                if (validateInput()) {
+                    $.ajax({
+                        url: '@Url.Action("Add", "StudySchedule")',
+                        data: dataModel,
+                        type: 'POST',
+                        success: function (respone) {
+                            if (respone.errorCode != 0) {
+                                $('span[target="ErrorMessage"]').text(respone.errorMessage);
+                            } else {
+                                $('span[target="ErrorMessage"]').text("Add StudySchedule successfully");
+                                setTimeout(function () {
+                                    window.location.href = '@Html.Raw(@Url.Action("StudySchedulePaging", "StudySchedule", new { PAGE_SIZE = 10, PAGE_INDEX = 1 }))';
+                                }, 1000)
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        },
+                        complete: function () {
+
+                        }
+                    })
+                }
+            })
+
+            $("#cancel-btn").click(function (event) {
+                event.preventDefault();
+                $.confirm({
+                    title: 'Are you want to cancel?',
+                    useBootstrap: false,
+                    theme: 'material',
+                    type: 'red',
+                    boxWidth: '500px',
+                    buttons: {
+                        confirm: {
+                            text: 'Yes',
+                            action: function () {
+                                window.location.href = '@Html.Raw(@Url.Action("StudySchedulePaging", "Computer", new { PAGE_SIZE = 10, PAGE_INDEX = 1}))';
+                            }
+                        },
+                        cancel: {
+                            text: 'No',
+                            keys: ['esc'],
+                            action: function () {
+                            }
+                        },
+                    }
+                });
+            })
+       })
+       function validateInput() {
+           var startDate = $("#StartDate").val();
+           if (startDate == '' || startDate == null) {
+               $('span[target="StartDate"]').text('Start Date is required');
+               return false;
+           };
+           return true;
+       }
+    </script>
+}

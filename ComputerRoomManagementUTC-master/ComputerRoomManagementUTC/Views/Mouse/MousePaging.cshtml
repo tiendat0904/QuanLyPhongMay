@@ -1,0 +1,125 @@
+﻿@model Common.Common.ReturnResult<Common.Entity.Models.Mouse.Mouse>
+@{
+    const int ACTIVATE = 1;
+    const int DEACTIVATE = 0;
+
+}
+<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage Computers</div>
+        </h1>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Computer Room List</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>
+                                            Action
+                                            <br />
+                                            <button id="add-btn" class="ion-plus"></button>
+                                        </th>
+                                    </tr>
+                                    @foreach (var province in Model.ItemList)
+                                    {
+                                <tr>
+                                    <td>@province.PK_Id</td>
+                                    <td>@province.Name</td>
+                                    @if (@province.Status == ACTIVATE)
+                                    {
+                                        <td><a href="javascript:void(0)" class="badge badge-success" onclick="UpdateStatus('@province.PK_Id', '@province.Name', '@DEACTIVATE')">Active</a></td>
+                                    }
+                                    else
+                                    {
+                                        <td><a href="javascript:void(0)" class="badge badge-danger" onclick="UpdateStatus('@province.PK_Id', '@province.Name', '@ACTIVATE')">Deactive</a></td>
+                                    }
+                                    <td>
+                                        <a href="@Url.Action("Edit", "Mouse", new { Id = province.PK_Id })" id="edit-btn" class="ion-edit" width="50px"></a>
+                                        <a href="javascript:void(0)" id="delete-btn" onclick="Delete('@province.PK_Id', '@province.Name')" class="ion-trash-a"></a>
+                                    </td>
+                                </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <nav class="d-inline-block">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1"><i class="ion ion-chevron-left"></i></a>
+                                    </li>
+
+                                    @{
+                                        var numberOfPages = Model.TotalRows / ViewBag.PAGE_SIZE;
+                                        for (int i = 0; i <= numberOfPages; i++)
+                                        {
+                                            <li class="page-item "><a class="page-link" href="@Url.Action("MousePaging", "Mouse", new { PAGE_INDEX = i+1, PAGE_SIZE = 10 })">@(i+1)<span class="sr-only">(current)</span></a></li>
+                                        }
+                                    }
+                                    <li class="page-item">
+                                        <a class="page-link" href="#"><i class="ion ion-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#add-btn").click(function () {
+                window.location.href = '@Url.Action("Add", "Mouse")';
+            });
+        })
+        function Delete (id, name) {
+            // Tạo thông tin xóa Mouse
+            var deleteInfo = {
+                Title: 'Xác nhận xóa Mouse',
+                Content: 'Bạn có muốn xóa <b>' + name + '</b> không?',
+                ConfirmButton: 'Xác nhận',
+                CancelButton: 'Hủy bỏ',
+                Id: id,
+                RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
+                Url: '@Url.Action("Delete", "Mouse")',
+                errorTitle: 'Thông báo lỗi',
+                errorContent: 'Thay đổi trạng thái thất bại'
+            };
+
+            
+            // Gọi hàm common để xóa trường học
+            common.delete(deleteInfo);
+        };  
+
+    function UpdateStatus(Id, Name, Status) {
+            var updateStatusInfo = {
+                Title: 'Xác nhận thay đổi trạng thái Mouse',
+                Content: 'Bạn có muốn thay đổi trạng thái của <b>' + Name + '</b> không?',
+                ConfirmButton: 'Xác nhận',
+                CancelButton: 'Hủy bỏ',
+                Id: Id,
+                Status: Status,
+                RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
+                Url: '@Url.Action("EditStatus", "Mouse")',
+                errorTitle: 'Thông báo lỗi',
+                errorContent: 'Thay đổi trạng thái thất bại'
+            }
+            common.updateStatus(updateStatusInfo);
+        };  
+    </script>
+}

@@ -1,0 +1,340 @@
+﻿@model Common.Entity.Models.Computer.Computer
+@{ 
+    var computerRoomId = ViewBag.ComputerRoomId;
+}
+<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage Computers</div>
+        </h1>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="login-brand">
+                                    Edit Computer @Model.PK_Id
+                                </div>
+                                <div class="card card-primary">
+                                    <div class="card-body">
+                                        <form id="add-form" class="needs-validation" novalidate="">
+                                            @Html.HiddenFor(computer => computer.PK_Id)
+                                            <div class="form-group">
+                                                <label for="ComputerName">Computer Name</label>
+                                                <input id="ComputerName" type="text" class="form-control" name="Name" tabindex="1" autofocus value="@Model.ComputerName">
+                                                <span target="ComputerName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="CpuName">CPU Name</label>
+                                                <select id="CpuName" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.CpuId">@Model.CpuName</option>
+                                                </select>
+                                                <span target="CpuName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="RamName">Ram Name</label>
+                                                <select id="RamName" class="select2" style="width:300px" tabindex="1">
+                                                    <option  value="@Model.RamId">@Model.RamName</option>
+                                                </select>
+                                                <span target="RamName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="KeyboardName">Keyboard Name</label>
+                                                <select id="KeyboardName" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.KeyboarId">@Model.KeyboardName</option>
+                                                </select>
+                                                <span target="KeyboardName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="MouseName">Mouse Name</label>
+                                                <select id="MouseName" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.MouseId">@Model.MouseName</option>
+                                                </select>
+                                                <span target="MouseName" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Monitor">Monitor Name</label>
+                                                <select id="Monitor" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.MonitorId">@Model.MonitorName</option>
+                                                </select>
+                                                <span target="Monitor" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="MonitorSize">Monitor Size Name</label>
+                                                <select id="MonitorSize" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.MonitorSizeId">@Model.MonitorSize</option>
+                                                </select>
+                                                <span target="MonitorSize" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="OpticalDisc">Optical disc Name</label>
+                                                <select id="OpticalDisc" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.OpticalDiscId">@Model.OpticalDiscName</option>
+                                                </select>
+                                                <span target="OpticalDisc" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Speed">Speed</label>
+                                                <select id="Speed" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.SpeedId">@Model.Speed</option>
+                                                </select>
+                                                <span target="Speed" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Storage">Storage Name</label>
+                                                <select id="Storage" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.StorageDeviceId">@Model.StorageDeviceName</option>
+                                                </select>
+                                                <span target="Storage" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="StorageCapacity">Storage Capacity Name</label>
+                                                <select id="StorageCapacity" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.StorageCapcityId">@Model.StorageCapacity</option>
+                                                </select>
+                                                <span target="StorageCapacity" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Status">
+                                                    Computer Status
+                                                </label>
+                                                <select id="Status" name="Status" class="js-example-basic-single" tabindex="2">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Deactive</option>
+                                                </select>
+                                                <span target="Status" class="error"></span>
+                                            </div>
+                                            <span target="ErrorMessage" class="error"></span>
+                                            <div class="form-group">
+                                                <button id="submit-btn" type="submit" class="btn btn-primary btn-block " tabindex="3">
+                                                    Submit
+                                                </button>
+                                                <button id="cancel-btn" on="cancel()" class="btn btn-primary btn-block" tabindex="4">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script>
+    $(document).ready(function () {
+        // Retrive data from datasource
+        masterData.GetCpuSelect2Data("CpuName");
+        masterData.GetRamSelect2Data("RamName");
+        masterData.GetKeyboardSelect2Data("KeyboardName");
+        masterData.GetMouseSelect2Data("MouseName");
+        masterData.GetMonitorSelect2Data("Monitor");
+        masterData.GetMonitorSizeSelect2Data("MonitorSize");
+        masterData.GetSpeedSelect2Data("Speed");
+        masterData.GetOpticalDiscSelect2Data("OpticalDisc");
+        masterData.GetStorageSelect2Data("Storage");
+        masterData.GetStorageCapacitySelect2Data("StorageCapacity");
+
+                @*$("#add-form").submit(function (event) {
+                    event.preventDefault();
+                    $("#add-form-btn").attr("disabled", true);
+                    if (validateInput()) {
+                        $.ajax({
+                            url: '@Url.Action("Add", "Computer")',
+                            data: $("#add-form").serialize(),
+                            type: 'POST',
+                            success: function (respone) {
+                                if (respone.errorCode != 0) {
+                                    $('span[target="ErrorMessage"]').text(respone.errorMessage);
+                                } else {
+                                    $('span[target="ErrorMessage"]').text("Add Computer successfully");
+                                    setTimeout(function () {
+                                        window.location.href = '@Html.Raw(@Url.Action("ComputerPaging", "Computer", new { PAGE_SIZE = 10, PAGE_INDEX = 1, computerRoomId = computerRoomId }))';
+                                    }, 1000)
+                                }
+                            },
+                            error: function (error) {
+                                console.log(error);
+                            },
+                            complete: function () {
+
+                            }
+                        })
+                    }
+                })
+            })*@
+
+
+        $("#submit-btn").click(function (event) {
+            
+            event.preventDefault();
+            var dataModel = {
+                Name: $("#ComputerName").val(),
+                ComputerRoomId: @Model.ComputerId,
+                StorageDeviceId: $("#Storage").select2('val'),
+                StorageCapacityId: $("#StorageCapacity").select2('val'),
+                CpuId: $("#CpuName").select2('val'),
+                RamId: $("#RamName").select2('val'),
+                SpeedId: $("#Speed").select2('val'),
+                MonitorId: $("#Monitor").select2('val'),
+                MonitorSizeId: $("#MonitorSize").select2('val'),
+                MouseId: $("#MouseName").select2('val'),
+                KeyboardId: $("#KeyboardName").select2('val'),
+                OpticalDiscId: $("#OpticalDisc").select2('val'),
+                Status: $("#Status").val()
+            };
+            console.log(dataModel);
+            
+            $.ajax({
+                url: '@Url.Action("Edit", "Computer")',
+                data: dataModel,
+                type: 'POST',
+                success: function (respone) {
+                    if (respone.errorCode != 0) {
+                        $('span[target="ErrorMessage"]').text(respone.errorMessage);
+                    } else {
+                        $('span[target="ErrorMessage"]').text("Add Computer successfully");
+                        setTimeout(function () {
+                            window.location.href = '@Html.Raw(@Url.Action("GetPagingByComputerId", "Computer", new { PAGE_SIZE = 10, PAGE_INDEX = 1,  computerRoomId = computerRoomId}))';
+                        }, 1000)
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+                complete: function () {
+
+                }
+            });
+        });
+
+        $("#cancel-btn").click(function (event) {
+            event.preventDefault();
+            $.confirm({
+                title: 'Are you want to cancel?',
+                useBootstrap: false,
+                theme: 'material',
+                type: 'red',
+                boxWidth: '500px',
+                buttons: {
+                    confirm: {
+                        text: 'Yes',
+                        action: function () {
+                            window.location.href = '@Html.Raw(@Url.Action("GetPagingByComputerId", "Computer", new { PAGE_SIZE = 10, PAGE_INDEX = 1, computerRoomId = computerRoomId }))';
+                        }
+                    },
+                    cancel: {
+                        text: 'No',
+                        keys: ['esc'],
+                        action: function () {
+                        }
+                    },
+                }
+            });
+        })
+    });
+
+    function validateInput() {
+        var Name = $("#ComputerName").val();
+        var StorageDeviceId= $("#Storage").select2('val');
+        var StorageCapacityId = $("#StorageCapacity").select2('val');
+        var CpuId = $("#CpuName").select2('val');
+        var RamId = $("#RamName").select2('val');
+        var SpeedId = $("#Speed").select2('val');
+        var MonitorId = $("#Monitor").select2('val');
+        var MonitorSizeId = $("#MonitorSize").select2('val');
+        var MouseId = $("#MouseName").select2('val');
+        var KeyboardId = $("#KeyboardName").select2('val');
+        var OpticalDiscId = $("#OpticalDisc").select2('val');
+        if (Name == '' || Name == null) {
+            $('span[target="ComputerName"]').text('Computer Name is required');
+            return false;
+        } else {
+            $('span[target="ComputerName"]').text('');
+        };
+
+        if (StorageDeviceId == '' || StorageDeviceId == null) {
+            $('span[target="Storage"]').text('Storage is required');
+            return false;
+        }else {
+            $('span[target="Storage"]').text('');
+        };
+        if (StorageCapacityId == '' || StorageCapacityId == null) {
+            $('span[target="StorageCapacity"]').text('Storage Capacity is required');
+            return false;
+        }else {
+            $('span[target="StorageCapacitys"]').text('');
+        };
+        if (CpuId == '' || CpuId == null) {
+            $('span[target="CpuName"]').text('Cpu Name is required');
+            return false;
+        }else {
+            $('span[target="CpuName"]').text('');
+        };
+        if (RamId == '' || RamId == null) {
+            $('span[target="RamName"]').text('Ram Name is required');
+            return false;
+        }else {
+            $('span[target="RamName"]').text('');
+        };
+        if (SpeedId == '' || SpeedId == null) {
+            $('span[target="Speed"]').text('Speed is required');
+            return false;
+        }else {
+            $('span[target="Speed"]').text('');
+        };
+        if (MonitorId == '' || MonitorId == null) {
+            $('span[target="Monitor"]').text('Monitor is required');
+            return false;
+        }else {
+            $('span[target="Monitor"]').text('');
+        };
+        if (MonitorSizeId == '' || MonitorSizeId == null) {
+            $('span[target="MonitorSize"]').text('Monitor Size is required');
+            return false;
+        }else {
+            $('span[target="MonitorSize"]').text('');
+        };
+        if (MouseId == '' || MouseId == null) {
+            $('span[target="MouseName"]').text('Mouse Name is required');
+            return false;
+        }else {
+            $('span[target="MouseName"]').text('');
+        };
+        if (KeyboardId == '' || KeyboardId == null) {
+            $('span[target="KeyboardName"]').text('Keyboard Name is required');
+            return false;
+        }else {
+            $('span[target="KeyboardName"]').text('');
+        };
+        if (OpticalDiscId == '' || OpticalDiscId == null) {
+            $('span[target="OpticalDisc"]').text('OpticalDisc is required');
+            return false;
+        }else {
+            $('span[target="OpticalDisc"]').text('');
+        };
+        return true;
+    }
+
+
+
+    </script>
+}

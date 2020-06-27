@@ -1,0 +1,98 @@
+﻿@model Common.Entity.Models.Subject.Subject
+<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage Computers</div>
+        </h1>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="login-brand">
+                                    Edit Subject @Model.Name
+                                </div>
+                                <div class="card card-primary">
+                                    <div class="card-body">
+                                        <form id="add-form" class="needs-validation" novalidate="">
+                                            @Html.HiddenFor(province => Model.PK_Id)
+                                            <div class="form-group">
+                                                <label for="Name">Subject Name</label>
+                                                <input id="Name" type="text" class="form-control" name="Name" tabindex="1" autofocus value="@Model.Name">
+                                                <span target="Name" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Status">
+                                                    Subject Status
+                                                </label>
+                                                <select name="Status" class="dropdown-item-text" tabindex="2">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Deactive</option>
+                                                </select>
+                                                <span target="Status" class="error"></span>
+                                            </div>
+                                            <span target="ErrorMessage" class="error"></span>
+                                            <div class="form-group">
+                                                <button id="submit-btn" type="submit" class="btn btn-primary btn-block " tabindex="3">
+                                                    Submit
+                                                </button>
+                                                <button id="cancel-btn" type="submit" class="btn btn-primary btn-block" tabindex="4">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script>
+       $(document).ready(function () {
+            $("#add-form").on('submit', function (event) {
+                event.preventDefault();
+                $("#submit-btn").attr("disabled", true);
+                if (validateInput()) {
+                    $.ajax({
+                        url: '@Url.Action("Edit", "Subject")',
+                        data: $("#add-form").serialize(),
+                        type: 'POST',
+                        success: function (respone) {
+                            if (respone.errorCode != 0) {
+                                $('span[target="ErrorMessage"]').text(respone.errorMessage);
+                            } else {
+                                $('span[target="ErrorMessage"]').text("Add Subject successfully");
+                                setTimeout(function () {
+                                    window.location.href = '@Html.Raw(@Url.Action("SubjectPaging", "Subject", new { PAGE_SIZE = 10, PAGE_INDEX = 1 }))';
+                                }, 1000)
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        },
+                        complete: function () {
+
+                        }
+                    })
+                }
+            })
+       })
+       function validateInput() {
+           var provinceName = $("#Name").val();
+           if (provinceName == '' || provinceName == null) {
+               $('span[target="Name"]').text('Subject Name is required');
+               return false;
+           };
+           return true;
+       }
+    </script>
+}

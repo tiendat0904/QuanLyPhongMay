@@ -1,0 +1,167 @@
+﻿<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage Employees</div>
+        </h1>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="login-brand">
+                                    Create a new Employee
+                                </div>
+                                <div class="card card-primary">
+                                    <div class="card-body">
+                                        <form id="add-form" class="needs-validation" novalidate="">
+                                            <div class="form-group">
+                                                <label for="Name">Employee Name</label>
+                                                <input id="Name" type="text" class="form-control" name="Name" tabindex="1" autofocus>
+                                                <span target="Name" class="error"></span>
+                                            </div>
+                                            <div id="flatpickrcontainer" class="form-group">
+                                                <label for="Dob">Dob</label>
+                                                <input id="Dob" type="date" class="form-control" name="Dob" tabindex="1">
+                                                <span target="Dob" class="error"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Gender">
+                                                    Employee Gender
+                                                </label>
+                                                <select id="Gender" name="Gender" class="dropdown-item-text" tabindex="2">
+                                                    <option value="1">Male</option>
+                                                    <option value="0">Female</option>
+                                                </select>
+                                                <span target="Status" class="error"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="PhoneNumber">PhoneNumber</label>
+                                                <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" tabindex="1">
+                                                <span target="PhoneNumber" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="ComputerRoom">Computer Room</label>
+                                                <select id="ComputerRoom" class="select2" style="width:300px" tabindex="1"></select>
+                                                <span target="ComputerRoom" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Province">Province Name</label>
+                                                <select id="Province" class="select2" style="width:300px" tabindex="1"></select>
+                                                <span target="Province" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="Status">
+                                                    Employee Status
+                                                </label>
+                                                <select id="Status" name="Status" class="dropdown-item-text" tabindex="2">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Deactive</option>
+                                                </select>
+                                                <span target="Status" class="error"></span>
+                                            </div>
+                                            <span target="ErrorMessage" class="error"></span>
+                                            <div class="form-group">
+                                                <button id="submit-btn" type="submit" class="btn btn-primary btn-block " tabindex="3">
+                                                    Submit
+                                                </button>
+                                                <button id="cancel-btn" type="submit" class="btn btn-primary btn-block" tabindex="4">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {            
+           
+            masterData.GetComputerRoomSelect2Data("ComputerRoom");
+            masterData.GetProvinceSelect2Data("Province");
+
+            $("#add-form").on('submit', function (event) {
+                event.preventDefault();
+                $("#add-form-btn").attr("disabled", true);
+                var dataModel = {
+                    Name: $("#Name").val(),
+                    Dob: $("#Dob").val(),
+                    Gender: $("#Gender").val(),
+                    Phone: $("Phone").val(),
+                    Status: $("Status").val(),
+                    FK_ProvinceId: $("#Province").select2('val'),
+                    FK_ComputerRoomId: $("#ComputerRoom").select2('val'),
+                    Status: $("#Status").val()
+                }
+                if (validateInput()) {
+                    $.ajax({
+                        url: '@Url.Action("Add", "Employee")',
+                        data: dataModel,
+                        type: 'POST',
+                        success: function (respone) {
+                            if (respone.errorCode != 0) {
+                                $('span[target="ErrorMessage"]').text(respone.errorMessage);
+                            } else {
+                                $('span[target="ErrorMessage"]').text("Add Employee successfully");
+                                setTimeout(function () {
+                                    window.location.href = '@Html.Raw(@Url.Action("EmployeePaging", "Employee", new { PAGE_SIZE = 10, PAGE_INDEX = 1 }))';
+                                }, 1000)
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        },
+                        complete: function () {
+
+                        }
+                    })
+                }
+            })
+
+            $("#cancel-btn").click(function (event) {
+            event.preventDefault();
+            $.confirm({
+                title: 'Are you want to cancel?',
+                useBootstrap: false,
+                theme: 'material',
+                type: 'red',
+                boxWidth: '500px',
+                buttons: {
+                    confirm: {
+                        text: 'Yes',
+                        action: function () {
+                            window.location.href = '@Html.Raw(@Url.Action("EmployeePaging", "Employee", new { PAGE_SIZE = 10, PAGE_INDEX = 1}))';
+                        }
+                    },
+                    cancel: {
+                        text: 'No',
+                        keys: ['esc'],
+                        action: function () {
+                        }
+                    },
+                }
+                });
+            })
+       })
+       function validateInput() {
+           var EmployeeName = $("#Name").val();
+           if (EmployeeName == '' || EmployeeName == null) {
+               $('span[target="Name"]').text('Employee Name is required');
+               return false;
+           };
+           return true;
+       }
+    </script>
+}

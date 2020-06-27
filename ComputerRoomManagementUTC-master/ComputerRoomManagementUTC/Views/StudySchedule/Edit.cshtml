@@ -1,0 +1,222 @@
+﻿@model Common.Entity.Models.StudySchedule.StudySchedule
+<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage Computers</div>
+        </h1>
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="login-brand">
+                                    Edit Study Schedule @Model.PK_Id
+                                </div>
+                                <div class="card card-primary">
+                                    <div class="card-body">
+                                        <form id="edit-form" class="row d-flex justify-content-centerneeds-validation" novalidate="">
+                                            @Html.HiddenFor(studySchedule => Model.PK_Id)
+                                            <div class="form-group col-md-6">
+                                                <label for="StartDate">Start Date</label>
+                                                <input id="StartDate" type="date" class="form-control" name="StartDate" tabindex="1" value="@Model.StartDate.ToString("yyyy-MM-dd")">
+                                                <span target="StartDate" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="EndDate">End Date</label>
+                                                <input id="EndDate" type="date" class="form-control" name="EndDate" tabindex="1" value="@Model.EndDate.ToString("yyyy-MM-dd")">
+                                                <span target="EndDate" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="DayOfWeek">
+                                                    Day Of Week
+                                                </label>
+                                                <br />
+                                                <select id="DayOfWeek" name="DayOfWeek" class="js-example-basic-single" tabindex="2">
+                                                    <option value="0">Sunday</option>
+                                                    <option value="1">Monday</option>
+                                                    <option value="2">Tuesday</option>
+                                                    <option value="3">Wednesday</option>
+                                                    <option value="4">Thursday</option>
+                                                    <option value="5">Friday</option>
+                                                    <option value="6">Saturday</option>
+                                                </select>
+                                                <span target="DayOfWeek" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="Class">Class Name</label>
+                                                <br />
+                                                <select id="Class" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.FK_ClassId">@Model.ClassName</option>
+                                                </select>
+                                                <span target="Class" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6" >
+                                                <label for="ComputerRoom">Computer Room Name</label>
+                                                <br />
+                                                <select id="ComputerRoom" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.FK_ComputeRoomId">@Model.ComputerRoomName</option>
+                                                </select>
+                                                <span target="ComputerRoom" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="Employee">Employee Name</label>
+                                                <br />
+                                                <select id="Employee" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.FK_EmployeeId">@Model.EmployeeName</option>
+                                                </select>
+                                                <span target="Employee" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="Shift">Shift Name</label>
+                                                <br />
+                                                <select id="Shift" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.FK_ShiftId">@Model.ShiftName</option>
+                                                </select>
+                                                <span target="Shift" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="Subject">Subject Name</label>
+                                                <br />
+                                                <select id="Subject" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.FK_SubjectId">@Model.SubjectName</option>
+                                                </select>
+                                                <span target="Subject" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="Teacher">Teacher Name</label>
+                                                <br />
+                                                <select id="Teacher" class="select2" style="width:300px" tabindex="1">
+                                                    <option value="@Model.FK_TeacherId">@Model.TeacherName</option>
+                                                </select>
+                                                <span target="Teacher" class="error"></span>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label for="Status">
+                                                    StudySchedule Status
+                                                </label>
+                                                <br />
+                                                <select id="Status" name="Status" class="dropdown-item-text" tabindex="2">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Deactive</option>
+                                                </select>
+                                                <span target="Status" class="error"></span>
+                                            </div>
+                                            <span target="ErrorMessage" class="error"></span>
+                                            <div class="form-group col-md-12">
+                                                <button id="submit-btn" type="submit" class="btn btn-primary btn-block " tabindex="3">
+                                                    Submit
+                                                </button>
+                                                <button id="cancel-btn" type="submit" class="btn btn-primary btn-block" tabindex="4">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            // Retrive data from datasource
+            masterData.GetClassSelect2Data("Class");
+            masterData.GetComputerRoomSelect2Data("ComputerRoom");
+            masterData.GetTeacherSelect2Data("Teacher");
+            masterData.GetShiftSelect2Data("Shift");
+            masterData.GetSubjectSelect2Data("Subject");
+            masterData.GetEmployeeSelect2Data("Employee");
+
+            $("#edit-form").on('submit', function (event) {
+                event.preventDefault();
+                $("#submit-btn").attr("disabled", true);
+                var dataModel = {
+                    pK_Id: $("#PK_Id").val(),
+                    startDate: $("#StartDate").val(),
+                    endDate: $("#EndDate").val(),
+                    classId: $("#Class").select2('val'),
+                    dayOfWeek: $("#DayOfWeek").val(),
+                    computerRoomId: $("#ComputerRoom").select2('val'),
+                    employeeId: $("#Employee").select2('val'),
+                    shiftId: $("#Shift").select2('val'),
+                    subjectId: $("#Subject").select2('val'),
+                    teacherId: $("#Teacher").select2('val'),
+                    status: $("#Status").val()
+                }
+                if (validateInput()) {
+                    $.ajax({
+                        url: '@Url.Action("Edit", "StudySchedule")',
+                        data: dataModel,
+                        type: 'POST',
+                        success: function (respone) {
+                            if (respone.errorCode != 0) {
+                                $('span[target="ErrorMessage"]').text(respone.errorMessage);
+                                setTimeout(function () {
+                                    window.location.reload();
+                                }, 5000);
+                            } else {
+                                $('span[target="ErrorMessage"]').text("Edit StudySchedule successfully");
+                                setTimeout(function () {
+                                    window.location.href = '@Html.Raw(@Url.Action("StudySchedulePaging", "StudySchedule", new { PAGE_SIZE = 10, PAGE_INDEX = 1 }))';
+                                }, 1000)
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        },
+                        complete: function () {
+
+                        }
+                    })
+                }
+            })
+
+            $("#cancel-btn").click(function (event) {
+                event.preventDefault();
+                $.confirm({
+                    title: 'Are you want to cancel?',
+                    useBootstrap: false,
+                    theme: 'material',
+                    type: 'red',
+                    boxWidth: '500px',
+                    buttons: {
+                        confirm: {
+                            text: 'Yes',
+                            action: function () {
+                                window.location.href = '@Html.Raw(@Url.Action("StudySchedulePaging", "Computer", new { PAGE_SIZE = 10, PAGE_INDEX = 1}))';
+                            }
+                        },
+                        cancel: {
+                            text: 'No',
+                            keys: ['esc'],
+                            action: function () {
+                            }
+                        },
+                    }
+                });
+            })
+       })
+       function validateInput() {
+           var startDate = $("#StartDate").val();
+           if (startDate == '' || startDate == null) {
+               $('span[target="StartDate"]').text('StartDateme is required');
+               return false;
+           };
+           var endDate = $("#EndDate").val();
+           if (endDate == '' || endDate == null) {
+               $('span[target="EndDate"]').text('EndDate is required');
+               return false;
+           };
+           return true;
+       }
+    </script>
+}

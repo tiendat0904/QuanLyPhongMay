@@ -1,0 +1,247 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\InsideAPI\\InsideAPI.csproj": {}
+  },
+  "projects": {
+    "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\Common.csproj",
+        "projectName": "Common",
+        "projectPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\Common.csproj",
+        "packagesPath": "C:\\Users\\TH\\.nuget\\packages\\",
+        "outputPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\TH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "EPPlus": {
+              "target": "Package",
+              "version": "[4.5.3.2, )"
+            },
+            "Microsoft.AspNetCore.Http.Abstractions": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC\\ComputerRoomManagementUTC.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC\\ComputerRoomManagementUTC.csproj",
+        "projectName": "ComputerRoomManagementUTC",
+        "projectPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC\\ComputerRoomManagementUTC.csproj",
+        "packagesPath": "C:\\Users\\TH\\.nuget\\packages\\",
+        "outputPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\TH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {
+              "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\Common.csproj": {
+                "projectPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\Common.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "Microsoft.AspNetCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Cryptography.KeyDerivation": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Razor.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Session": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.Owin.Security.Jwt": {
+              "target": "Package",
+              "version": "[4.0.1, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[2.2.4, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\InsideAPI\\InsideAPI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\InsideAPI\\InsideAPI.csproj",
+        "projectName": "InsideAPI",
+        "projectPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\InsideAPI\\InsideAPI.csproj",
+        "packagesPath": "C:\\Users\\TH\\.nuget\\packages\\",
+        "outputPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\InsideAPI\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\TH\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {
+              "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\Common.csproj": {
+                "projectPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\Common\\Common.csproj"
+              },
+              "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC\\ComputerRoomManagementUTC.csproj": {
+                "projectPath": "E:\\laptrinhweb\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC-master\\ComputerRoomManagementUTC\\ComputerRoomManagementUTC.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "Microsoft.AspNetCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Razor.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Session": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

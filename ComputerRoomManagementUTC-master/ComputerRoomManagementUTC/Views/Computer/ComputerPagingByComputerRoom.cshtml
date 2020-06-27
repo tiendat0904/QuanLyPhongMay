@@ -1,0 +1,369 @@
+﻿@model Common.Common.ReturnResult<Common.Entity.Models.Computer.Computer>
+@{
+    const int ACTIVATE = 1;
+    const int DEACTIVATE = 0;
+
+}
+<div class="main-content">
+    <section class="section">
+        <h1 class="section-header">
+            <div>Manage Computers</div>
+        </h1>
+        <input type="button" class="btn btn-sm btn-info"
+               value="Export Excel"
+               onclick="location.href='@Url.Action("ExportExcel", "Computer", new { id = ViewBag.ComputerRoomId})'">
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Computer List In Room @ViewBag.ComputerRoomId</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table id="table" class="table table-striped">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>ComputerName</th>
+                                        <th>Status</th>
+                                        <th>Cpu</th>
+                                        <th>Ram</th>
+                                        <th>Storage Device</th>
+                                        <th>Storage Capacity</th>
+                                        <th>Monitor</th>
+                                        <th>Monitor Size</th>
+                                        <th>Mouse</th>
+                                        <th>Keyboard</th>
+                                        <th>Optical Disc Driver</th>
+                                        <th>
+                                            Action
+                                            <br />
+                                            <button id="add-btn" class="ion-plus"></button>
+                                        </th>
+                                    </tr>
+                                    @foreach (var computer in Model.ItemList)
+                                    {
+                                        <tr>
+                                            <td>@computer.PK_Id</td>
+                                            <td>@computer.ComputerName</td>
+                                            @if (@computer.Status == ACTIVATE)
+                                            {
+                                                <td><a href="javascript:void(0)" class="badge badge-success" onclick="UpdateStatus('@computer.PK_Id', '@computer.ComputerName', '@DEACTIVATE')">Active</a></td>
+                                            }
+                                            else
+                                            {
+                                                <td><a href="javascript:void(0)" class="badge badge-danger" onclick="UpdateStatus('@computer.PK_Id', '@computer.ComputerName', '@ACTIVATE')">Deactive</a></td>
+                                            }
+                                            <td>@computer.CpuName</td>
+                                            <td>@computer.RamName</td>
+                                            <td>@computer.StorageDeviceName</td>
+                                            <td>@computer.StorageCapacity</td>
+                                            <td>@computer.MonitorName</td>
+                                            <td>@computer.MonitorSize</td>
+                                            <td>@computer.MouseName</td>
+                                            <td>@computer.KeyboardName</td>
+                                            <td>@computer.OpticalDiscName</td>
+
+                                            <td>
+                                                <a href="@Url.Action("Edit", "Computer", new { computerId = computer.PK_Id })" id="edit-btn" class="ion-edit" width="50px"></a>
+                                                <a href="javascript:void(0)" id="delete-btn" onclick="Delete('@computer.PK_Id', '@computer.ComputerName')" class="ion-trash-a"></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <nav class="d-inline-block">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1"><i class="ion ion-chevron-left"></i></a>
+                                    </li>
+
+                                    @{
+                                        var numberOfPages = Model.TotalRows / ViewBag.PAGE_SIZE;
+                                        for (int i = 0; i <= numberOfPages; i++)
+                                        {
+                                            <li class="page-item "><a class="page-link" href="@Url.Action("GetPagingByComputerId", "Computer", new { PAGE_INDEX = i+1, PAGE_SIZE = 10, ComputerRoomId = ViewBag.ComputerRoomId })">@(i + 1)<span class="sr-only">(current)</span></a></li>
+                                        }
+                                    }
+                                    <li class="page-item">
+                                        <a class="page-link" href="#"><i class="ion ion-chevron-right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-12 col-md-12 col-lg-12">
+                                <div class="card card-primary">
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-6">
+                                                <label for="Computer">Computer Name</label>
+                                                <select id="Computer" class="select2" style="width:300px" tabindex="1" multiple="multiple">
+                                                    <option></option>
+                                                </select>
+                                                <span target="Storage" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-6">
+                                                <label for="CpuName">CPU Name</label>
+                                                <select id="CpuName" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="CpuName" class="error"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group col-6">
+                                                <label for="RamName">Ram Name</label>
+                                                <select id="RamName" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="RamName" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-6">
+                                                <label for="KeyboardName">Keyboard Name</label>
+                                                <select id="KeyboardName" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="KeyboardName" class="error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-6">
+                                                <label for="MouseName">Mouse Name</label>
+                                                <select id="MouseName" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="MouseName" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-6">
+                                                <label for="Monitor">Monitor Name</label>
+                                                <select id="Monitor" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="Monitor" class="error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-6">
+                                                <label for="MonitorSize">Monitor Size Name</label>
+                                                <select id="MonitorSize" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="MonitorSize" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-6">
+                                                <label for="OpticalDisc">Optical disc Name</label>
+                                                <select id="OpticalDisc" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="OpticalDisc" class="error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-6">
+                                                <label for="Speed">Speed</label>
+                                                <select id="Speed" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="Speed" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-6">
+                                                <label for="Storage">Storage Name</label>
+                                                <select id="Storage" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="Storage" class="error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-6">
+                                                <label for="StorageCapacity">Storage Capacity Name</label>
+                                                <select id="StorageCapacity" class="select2" style="width:300px" tabindex="1" multiple="multiple"><option></option></select>
+                                                <span target="StorageCapacity" class="error"></span>
+                                            </div>
+                                            <div class="form-group col-6">
+                                                <label for="Status">Computer Status</label>
+                                                <select id="Status" name="Status" class="js-example-basic-single" tabindex="2">
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Deactive</option>
+                                                </select>
+                                                <span target="Status" class="error"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button id="search-btn" type="submit" class="btn btn-primary btn-block">
+                                                Search
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script>
+    $(document).ready(function () {
+            $("html").niceScroll();
+            $("#add-btn").click(function () {
+                window.location.href = '@Url.Action("Add", "Computer")';
+            });
+
+            getFilterData();
+
+            $("#search-btn").click(function (event) {
+                event.preventDefault();
+                var dataModel =
+                {
+                    filterRuleList: searchInfo(),
+                    PAGE_INDEX : @ViewBag.PAGE_INDEX,
+                    PAGE_SIZE : @ViewBag.PAGE_SIZE,
+                    computerRoomId : @ViewBag.ComputerRoomId
+                };
+                
+                $.ajax({
+                    url: '@Url.Action("Test", "Computer")',
+                    type: "POST",
+                    data: dataModel,
+                    dataType: "json",
+                    cache: false,
+                    beforeSend: function (xhr) {
+
+                    },
+                    success: function (response) {
+                        var itemList = response.itemList;
+                        if (itemList.length > 0) {
+                            $('#table').find("tr:gt(0)").remove();
+                            for (var i = 0; i < itemList.length; i++){
+                                var item = response.itemList[i];
+                                var text = `    <tr>
+                                <td> ` + item.pK_Id + `</td>
+                                <td> `+ item.computerName + `</td>
+                                <td><a href="javascript:void(0)" class="badge badge-success" onclick="UpdateStatus(' ` +item.pK_Id+ `', '` +item.computerName+ `', '1')">Active</a></td>
+                                <td> `+ item.cpuName + `</td>
+                                <td> `+ item.ramName + `</td>
+                                <td> `+ item.storageDeviceName + `</td>
+                                <td> `+ item.StorageCapacity + `</td>
+                                <td> `+ item.monitorName + `</td>
+                                <td> `+ item.monitorSize + `</td>
+                                <td> `+ item.mouseName + `</td>
+                                <td> `+ item.keyboardName + `</td>
+                                <td> `+ item.opticalDiscName + `</td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "Computer")?computerId=` + item.pK_Id+ `" id="edit - btn" class="ion-edit" width="50px"></a>
+                                    <a href="javascript:void(0)" id="delete-btn" onclick="Delete(' `+ item.pK_Id + `', '`+item.computerName+`')" class="ion-trash-a"></a>
+                                </td>
+                                </tr>`;
+                                $('#table tr:last').after(text);
+                            }
+                        }else {
+                            $.confirm({
+                                        title: 'Thông báo',
+                                        useBootstrap: false,
+                                        type: 'blue',
+                                        boxWidth: '500px',
+                                        content: 'Can not find any matching data',
+                                        buttons: {
+                                            confirm: {
+                                                text: 'OK',
+                                                btnClass: 'btn-blue',
+                                                key: ['enter'],
+                                                action: function () {
+                                                    location.reload();
+                                                }
+                                            }
+                                        }
+                                    });
+                        }
+                        var text = "<td>Hello</td>";
+                        window.scroll({
+                            top: 0, 
+                            left: 0, 
+                            behavior: 'smooth'
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                    },
+                    complete: function () {
+                    }
+                });
+            })
+
+        })
+
+
+        function Delete (id, name) {
+            // Tạo thông tin xóa Computer
+            var deleteInfo = {
+                Title: 'Xác nhận xóa Computer',
+                Content: 'Bạn có muốn xóa <b>' + name + '</b> không?',
+                ConfirmButton: 'Xác nhận',
+                CancelButton: 'Hủy bỏ',
+                Id: id,
+                RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
+                Url: '@Url.Action("Delete", "Computer")',
+                errorTitle: 'Thông báo lỗi',
+                errorContent: 'Thay đổi trạng thái thất bại'
+            };
+
+
+            // Gọi hàm common để xóa trường học
+            common.delete(deleteInfo);
+    };
+
+    function getFilterData() {
+            TransformComputerToSelect2();
+            masterData.GetCpuSelect2Data("CpuName");
+            masterData.GetRamSelect2Data("RamName");
+            masterData.GetKeyboardSelect2Data("KeyboardName");
+            masterData.GetMouseSelect2Data("MouseName");
+            masterData.GetMonitorSelect2Data("Monitor");
+            masterData.GetMonitorSizeSelect2Data("MonitorSize");
+            masterData.GetSpeedSelect2Data("Speed");
+            masterData.GetOpticalDiscSelect2Data("OpticalDisc");
+            masterData.GetStorageSelect2Data("Storage");
+            masterData.GetStorageCapacitySelect2Data("StorageCapacity");
+            $("#Status").select2();
+    };
+    function TransformComputerToSelect2() {
+        var computerList = @Html.Raw(Json.Serialize(Model.ItemList));
+        var data = $.map(computerList, function (obj) {
+                    obj.id = obj.pK_Id;
+                    obj.text = obj.computerName;
+                    return obj;
+                });
+
+                $("#Computer").select2({
+                    placeholder: "Select a Review",
+                    data: data
+                });
+    }
+    function UpdateStatus(Id, ComputerName, Status) {
+            var updateStatusInfo = {
+                Title: 'Xác nhận thay đổi trạng thái Computer',
+                Content: 'Bạn có muốn thay đổi trạng thái của <b>' + ComputerName + '</b> không?',
+                ConfirmButton: 'Xác nhận',
+                CancelButton: 'Hủy bỏ',
+                Id: Id,
+                Status: Status,
+                RequestVerificationToken: $("input[name=__RequestVerificationToken]").val(),
+                Url: '@Url.Action("EditStatus", "Computer")',
+                errorTitle: 'Thông báo lỗi',
+                errorContent: 'Thay đổi trạng thái thất bại'
+            }
+            common.updateStatus(updateStatusInfo);
+            };
+
+    function searchInfo() {
+        var filterItem = [{ field: "computer.PK_id", op: "and_in_ints", value: $("#Computer").val().join(), },
+            { field: "FK_StorageDeviceId", op: "and_in_ints", value: $("#Storage").val().join() },
+            { field: "FK_StorageCapacityId", op: "and_in_ints", value: $("#StorageCapacity").select2('val').join() },
+            { field: "FK_CpuId", op: "and_in_ints", value: $("#CpuName").select2('val').join() },
+            { field: "FK_RamId", op: "and_in_ints", value: $("#RamName").select2('val').join() },
+            { field: "FK_SpeedId", op: "and_in_ints", value: $("#Speed").select2('val').join() },
+            { field: "FK_MonitorId", op: "and_in_ints", value: $("#Monitor").select2('val').join() },
+            { field: "FK_MonitorSizeId", op: "and_in_ints", value: $("#MonitorSize").select2('val').join() },
+            { field: "FK_MouseId", op: "and_in_ints", value: $("#MouseName").select2('val').join() },
+            { field: "FK_KeyboardId", op: "and_in_ints", value: $("#KeyboardName").select2('val').join() },
+            { field: "FK_CdDriverId", op: "and_in_ints", value: $("#OpticalDisc").select2('val').join() },
+            { field: "computer.Status", op: "and_in_ints", value: $("#Status").select2('val') }] ;
+        return filterItem;
+    }
+    </script>
+}
